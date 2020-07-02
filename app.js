@@ -1,7 +1,6 @@
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const Employee = require("./lib/Employee")
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
@@ -10,6 +9,8 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+
+const employees = [];
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -35,57 +36,87 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
 
-inquirer.prompt([
+// Ask information about the manager
+ inquirer.prompt([
     {
+        // name, email, office number
         type: "input",
-        message: "What is your name?",
+        message: "Enter manager's name:",
         name: "name"
     },
     {
         type: "input",
-        message: "What is your email address?",
+        message: "Enter manager's email address:",
         name: "email"
     },
     {
-        type: "list",
-        message: "What is your role with the company?",
-        choices: ["Engineer", "Manager", "Intern"],
-        name: "role"
-    }
-]).then(function(response){
-    if (response.role === "Engineer"){
-        inquirer.prompt([
-            {
-                type: "input",
-                message: "What is your GitHub user name?",
-                name: "github"
-            }
-        ]).then(function(response){
-            Engineer.github = response.github
-        })
-    }
-    else if (response.role === "Manager"){
-        inquirer.prompt([
-            {
-                type: "input",
-                message: "What is your office number?",
-                name: "office"
-            }
-        ]).then(function(response){
-            Manager.officeNumber = response.office
-        })
-    }
-    else if (response.role === "Intern"){
-        inquirer.prompt([
-            {
-                type: "input",
-                message: "What school do you attend?",
-                name: "school"
-            }
-        ]).then(function(response){
-            Intern.school = response.school
-        })
-    }
-    `${response.role}`.name = response.name;
-    `${response.role}`.email = response.email;
-})
+        type: "input",
+        message: "Enter office number:",
+        name: "officeNumber"
+    }])
+    .then(function(response){
+        Manager.name = response.name;
+        Manager.email = response.email;
+        Manager.officeNumber = response.officeNumber;
+        // push manager information into employees array
+    })
+    .then(function(){
+     // Ask information for employee
+     inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter employee name:",
+            name: "name"
+        },
+        {
+            type: "input",
+            message: "Enter employee email address?",
+            name: "email"
+        },
+        {
+            type: "list",
+            message: "Enter employee role:",
+            choices: ["Engineer", "Intern"],
+            name: "role"
+        }
+    ]).then(function(response){
+        if (response.role === "Engineer"){
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "What is your GitHub user name?",
+                    name: "github"
+                }
+            ]).then(function(response){
+                Engineer.github = response.github
+            })
+        }
+        else if (response.role === "Intern"){
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "What school do you attend?",
+                    name: "school"
+                }
+            ]).then(function(response){
+                Intern.school = response.school
+            })
+        }
+        `${response.role}`.name = response.name;
+        `${response.role}`.email = response.email;
+    })
+    })
+// Ask information for employee
+    // name, email, role
+        // if engineer, ask github
+        // if intern, ask school
+    // push employee information into array
+    // ask if you need aditional employees
+// render HTML from array
+
+
+
+
+// .then(function(){
+//     render();
+// })
