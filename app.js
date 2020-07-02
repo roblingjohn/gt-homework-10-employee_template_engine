@@ -49,7 +49,7 @@ inquirer.prompt([
     {
         type: "list",
         message: "What is your role with the company?",
-        choices: ["Engineer", "Manager", "Intern"];
+        choices: ["Engineer", "Manager", "Intern"],
         name: "role"
     }
 ]).then(function(response){
