@@ -45,8 +45,14 @@ inquirer.prompt([
         type: "input",
         message: "What is your email address?",
         name: "email"
+    },
+    {
+        type: "list",
+        message: "What is your role with the company?",
+        choices: ["Engineer", "Manager", "Intern"];
+        name: "role"
     }
 ]).then(function(response){
-    Employee.name = response.name;
-    Employee.email = response.email;
-}).then(Employee.getName())
+    `${response.role}`.name = response.name;
+    `${response.role}`.email = response.email;
+}).then(`${response.role}`.getName())
