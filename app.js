@@ -49,10 +49,43 @@ inquirer.prompt([
     {
         type: "list",
         message: "What is your role with the company?",
-        choices: ["Engineer", "Manager", "Intern"];
+        choices: ["Engineer", "Manager", "Intern"],
         name: "role"
     }
 ]).then(function(response){
+    if (response.role === "Engineer"){
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What is your GitHub user name?",
+                name: "github"
+            }
+        ]).then(function(response){
+            Engineer.github = response.github
+        })
+    }
+    else if (response.role === "Manager"){
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What is your office number?",
+                name: "office"
+            }
+        ]).then(function(response){
+            Manager.officeNumber = response.office
+        })
+    }
+    else if (response.role === "Intern"){
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "What school do you attend?",
+                name: "school"
+            }
+        ]).then(function(response){
+            Intern.school = response.school
+        })
+    }
     `${response.role}`.name = response.name;
     `${response.role}`.email = response.email;
-}).then(`${response.role}`.getName())
+})
