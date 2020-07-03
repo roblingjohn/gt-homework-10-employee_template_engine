@@ -11,6 +11,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 const employees = [];
+const ID = require("./lib/id")
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -55,9 +56,12 @@ const employees = [];
         name: "officeNumber"
     }])
     .then(function(response){
+        console.log(Manager.name)
         Manager.name = response.name;
         Manager.email = response.email;
         Manager.officeNumber = response.officeNumber;
+        Manager.id = ID.number;
+        ID.number++;
         employees.push({
             "name": Manager.name, 
             "role": "Manager",
@@ -67,10 +71,14 @@ const employees = [];
         })
         console.log(employees);
         // push manager information into employees array
+    }).then(function(){
+        employeeInfo();
     })
-    .then(function(){
      // Ask information for employee
-     inquirer.prompt([
+
+
+function employeeInfo(){
+         inquirer.prompt([
         {
             // name, email, role
 
@@ -89,7 +97,9 @@ const employees = [];
             choices: ["Engineer", "Intern"],
             name: "role"
         }
-    ])}).then(function(response){
+    ]).then(function(response){
+        `${response.role}`.name = response.name;
+        `${response.role}`.email = response.email;
         // if engineer, ask github
         if (response.role === "Engineer"){
             inquirer.prompt([
@@ -106,7 +116,9 @@ const employees = [];
                     "email": Engineer.email,
                     "id": Engineer.id,
                     "github": Engineer.github
-                })
+                });
+                console.log(employees);
+
             })
         }
         // if intern, ask school
@@ -125,10 +137,10 @@ const employees = [];
                     "email": Intern.email,
                     "id": Intern.id,
                     "school": Intern.school
-                })
+                });
+                console.log(employees);
             })
-        
-        `${response.role}`.name = response.name;
-        `${response.role}`.email = response.email;
-            }
+        }
+    }).then(function(){
     })
+}
