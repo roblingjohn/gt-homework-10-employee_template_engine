@@ -10,10 +10,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const employees = [];
-const IDnumber = require("./lib/id")
-// const ID = {"number": 69}
-
+let employees = [];
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
@@ -48,6 +45,11 @@ const IDnumber = require("./lib/id")
     },
     {
         type: "input",
+        message: "Enter manager's ID number:",
+        name: "id"
+    },
+    {
+        type: "input",
         message: "Enter manager's email address:",
         name: "email"
     },
@@ -57,18 +59,32 @@ const IDnumber = require("./lib/id")
         name: "officeNumber"
     }])
     .then(function(response){
-        const manager = new Manager(response.name, 1, response.email, response.officeNumber)
+        const manager = new Manager(response.name, response.id, response.email, response.officeNumber)
         employees.push(manager)
-        console.log(employees);
         // push manager information into employees array
     }).then(function(){
-        employeeInfo();
+        newEmployee();
     })
      // Ask information for employee
 
+function newEmployee(){            
+    inquirer.prompt({
+        type: "confirm",
+        message: "Would you like to enter another employee?",
+        name: "another"
+}).then(function(response){
+    if(response.another){
+        employeeInfo();
+    }
+    else {
+        render(employees);
+    }
+})
+
+}
 
 function employeeInfo(){
-         inquirer.prompt([
+    inquirer.prompt([
         {
             // name, email, role
 
@@ -78,7 +94,12 @@ function employeeInfo(){
         },
         {
             type: "input",
-            message: "Enter employee email address?",
+            message: "Enter employee ID number:",
+            name: "id"
+        },
+        {
+            type: "input",
+            message: "Enter employee email address:",
             name: "email"
         },
         {
@@ -89,6 +110,7 @@ function employeeInfo(){
         }
     ]).then(function(response){
         let tempName = response.name;
+        let tempID = response.id;
         let tempEmail = response.email;
         // if engineer, ask github
         if (response.role === "Engineer"){
@@ -99,9 +121,10 @@ function employeeInfo(){
                     name: "github"
                 }
             ]).then(function(response){
-                const engineer = new Engineer(tempName, 69, tempEmail, response.github)
+                const engineer = new Engineer(tempName, tempID, tempEmail, response.github)
                 employees.push(engineer)
                 console.log(employees)
+                newEmployee();
             })
         }
         // if intern, ask school
@@ -113,9 +136,10 @@ function employeeInfo(){
                     name: "school"
                 }
             ]).then(function(response){
-                    const intern = new Intern(tempName, 69, tempEmail, response.school)
+                    const intern = new Intern(tempName, tempID, tempEmail, response.school)
                     employees.push(intern)
                     console.log(employees)
+                    newEmployee();
             })
         }
     })
