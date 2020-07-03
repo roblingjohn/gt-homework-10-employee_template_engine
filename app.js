@@ -59,16 +59,30 @@ const IDnumber = require("./lib/id")
     .then(function(response){
         const manager = new Manager(response.name, 1, response.email, response.officeNumber)
         employees.push(manager)
-        console.log(employees);
         // push manager information into employees array
     }).then(function(){
-        employeeInfo();
+        newEmployee();
     })
      // Ask information for employee
 
+function newEmployee(){            
+    inquirer.prompt({
+        type: "confirm",
+        message: "Would you like to enter another employee?",
+        name: "another"
+}).then(function(response){
+    if(response.another){
+        employeeInfo();
+    }
+    else {
+        render(employees);
+    }
+})
+
+}
 
 function employeeInfo(){
-         inquirer.prompt([
+    inquirer.prompt([
         {
             // name, email, role
 
@@ -102,6 +116,7 @@ function employeeInfo(){
                 const engineer = new Engineer(tempName, 69, tempEmail, response.github)
                 employees.push(engineer)
                 console.log(employees)
+                newEmployee();
             })
         }
         // if intern, ask school
@@ -116,6 +131,7 @@ function employeeInfo(){
                     const intern = new Intern(tempName, 69, tempEmail, response.school)
                     employees.push(intern)
                     console.log(employees)
+                    newEmployee();
             })
         }
     })
