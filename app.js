@@ -11,7 +11,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 const employees = [];
-const ID = require("./lib/id")
+const IDnumber = require("./lib/id")
 // const ID = {"number": 69}
 
 
@@ -57,19 +57,8 @@ const ID = require("./lib/id")
         name: "officeNumber"
     }])
     .then(function(response){
-        console.log(Manager.name)
-        Manager.name = response.name;
-        Manager.email = response.email;
-        Manager.officeNumber = response.officeNumber;
-        Manager.id = ID.number;
-        ID.nextID();
-        employees.push({
-            "name": Manager.name, 
-            "role": "Manager",
-            "email": Manager.email,
-            "id": Manager.id,
-            "officeNumber": Manager.officeNumber
-        })
+        const manager = new Manager(response.name, 1, response.email, response.officeNumber)
+        employees.push(manager)
         console.log(employees);
         // push manager information into employees array
     }).then(function(){
@@ -99,7 +88,8 @@ function employeeInfo(){
             name: "role"
         }
     ]).then(function(response){
-        let tempEmail = response.email
+        let tempName = response.name;
+        let tempEmail = response.email;
         // if engineer, ask github
         if (response.role === "Engineer"){
             inquirer.prompt([
@@ -109,18 +99,9 @@ function employeeInfo(){
                     name: "github"
                 }
             ]).then(function(response){
-                Engineer.email = tempEmail;
-                Engineer.github = response.github;
-                Engineer.id = ID.number;
-                employees.push({
-                    "name": Engineer.name, 
-                    "role": "Engineer",
-                    "email": Engineer.email,
-                    "id": Engineer.id,
-                    "github": Engineer.github
-                });
-                console.log(employees);
-
+                const engineer = new Engineer(tempName, 69, tempEmail, response.github)
+                employees.push(engineer)
+                console.log(employees)
             })
         }
         // if intern, ask school
@@ -132,19 +113,10 @@ function employeeInfo(){
                     name: "school"
                 }
             ]).then(function(response){
-                Intern.email = tempEmail;
-                Intern.school = response.school;
-                Intern.id = ID.number;
-                employees.push({
-                    "name": Intern.name, 
-                    "role": "Intern",
-                    "email": Intern.email,
-                    "id": Intern.id,
-                    "school": Intern.school
-                });
-                console.log(employees);
+                    const intern = new Intern(tempName, 69, tempEmail, response.school)
+                    employees.push(intern)
+                    console.log(employees)
             })
         }
-    }).then(function(){
     })
 }
