@@ -12,6 +12,7 @@ const render = require("./lib/htmlRenderer");
 
 const employees = [];
 const ID = require("./lib/id")
+// const ID = {"number": 69}
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -61,7 +62,7 @@ const ID = require("./lib/id")
         Manager.email = response.email;
         Manager.officeNumber = response.officeNumber;
         Manager.id = ID.number;
-        ID.number++;
+        ID.nextID();
         employees.push({
             "name": Manager.name, 
             "role": "Manager",
@@ -98,8 +99,7 @@ function employeeInfo(){
             name: "role"
         }
     ]).then(function(response){
-        `${response.role}`.name = response.name;
-        `${response.role}`.email = response.email;
+        let tempEmail = response.email
         // if engineer, ask github
         if (response.role === "Engineer"){
             inquirer.prompt([
@@ -109,7 +109,9 @@ function employeeInfo(){
                     name: "github"
                 }
             ]).then(function(response){
-                Engineer.github = response.github
+                Engineer.email = tempEmail;
+                Engineer.github = response.github;
+                Engineer.id = ID.number;
                 employees.push({
                     "name": Engineer.name, 
                     "role": "Engineer",
@@ -130,7 +132,9 @@ function employeeInfo(){
                     name: "school"
                 }
             ]).then(function(response){
-                Intern.school = response.school
+                Intern.email = tempEmail;
+                Intern.school = response.school;
+                Intern.id = ID.number;
                 employees.push({
                     "name": Intern.name, 
                     "role": "Intern",
