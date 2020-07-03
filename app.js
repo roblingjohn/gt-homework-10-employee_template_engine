@@ -58,12 +58,22 @@ const employees = [];
         Manager.name = response.name;
         Manager.email = response.email;
         Manager.officeNumber = response.officeNumber;
+        employees.push({
+            "name": Manager.name, 
+            "role": "Manager",
+            "email": Manager.email,
+            "id": Manager.id,
+            "officeNumber": Manager.officeNumber
+        })
+        console.log(employees);
         // push manager information into employees array
     })
     .then(function(){
      // Ask information for employee
      inquirer.prompt([
         {
+            // name, email, role
+
             type: "input",
             message: "Enter employee name:",
             name: "name"
@@ -79,7 +89,8 @@ const employees = [];
             choices: ["Engineer", "Intern"],
             name: "role"
         }
-    ]).then(function(response){
+    ])}).then(function(response){
+        // if engineer, ask github
         if (response.role === "Engineer"){
             inquirer.prompt([
                 {
@@ -89,8 +100,16 @@ const employees = [];
                 }
             ]).then(function(response){
                 Engineer.github = response.github
+                employees.push({
+                    "name": Engineer.name, 
+                    "role": "Engineer",
+                    "email": Engineer.email,
+                    "id": Engineer.id,
+                    "github": Engineer.github
+                })
             })
         }
+        // if intern, ask school
         else if (response.role === "Intern"){
             inquirer.prompt([
                 {
@@ -100,23 +119,16 @@ const employees = [];
                 }
             ]).then(function(response){
                 Intern.school = response.school
+                employees.push({
+                    "name": Intern.name, 
+                    "role": "Intern",
+                    "email": Intern.email,
+                    "id": Intern.id,
+                    "school": Intern.school
+                })
             })
-        }
+        
         `${response.role}`.name = response.name;
         `${response.role}`.email = response.email;
+            }
     })
-    })
-// Ask information for employee
-    // name, email, role
-        // if engineer, ask github
-        // if intern, ask school
-    // push employee information into array
-    // ask if you need aditional employees
-// render HTML from array
-
-
-
-
-// .then(function(){
-//     render();
-// })
