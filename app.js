@@ -117,13 +117,12 @@ function employeeInfo(){
             inquirer.prompt([
                 {
                     type: "input",
-                    message: "What is your GitHub user name?",
+                    message: "Enter employee's GitHub user name:",
                     name: "github"
                 }
             ]).then(function(response){
                 const engineer = new Engineer(tempName, tempID, tempEmail, response.github)
                 employees.push(engineer)
-                console.log(employees)
                 newEmployee();
             })
         }
@@ -132,13 +131,12 @@ function employeeInfo(){
             inquirer.prompt([
                 {
                     type: "input",
-                    message: "What school do you attend?",
+                    message: "Enter employee's current school:",
                     name: "school"
                 }
             ]).then(function(response){
                     const intern = new Intern(tempName, tempID, tempEmail, response.school)
                     employees.push(intern)
-                    console.log(employees)
                     newEmployee();
             })
         }
